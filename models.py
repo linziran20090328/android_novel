@@ -5,12 +5,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db
 from flask_login import UserMixin
 
+tb_user_collection = db.Table(
+    "info_user_collection",
+    db.Column("user_id", db.Integer, db.ForeignKey("info_user.id"), primary_key=True),  # 文章编号
+    db.Column("news_id", db.Integer, db.ForeignKey("info_news.id"), primary_key=True),  # 分类编号
+    db.Column("create_time", db.DateTime, default=datetime.now)  # 收藏创建时间
+)
+
+
 class BaseModel(object):
     """模型基类，为每个模型补充创建时间与更新时间"""
     create_time = db.Column(db.DateTime, default=datetime.now)  # 记录的创建时间
     update_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  # 记录的更新时间
 
-class User(db.Model, UserMixin,BaseModel):
+
+class User(db.Model, UserMixin, BaseModel):
     __tablename__ = 'info_user'
     id = db.Column(db.Integer, primary_key=True)  # 用户编号
     nick_name = db.Column(db.String(32), unique=True, nullable=False)  # 用户昵称
@@ -26,17 +35,21 @@ class User(db.Model, UserMixin,BaseModel):
             "WOMAN"  # 女
         ),
         default="MAN")
+    collection_news = db.relationship("News", secondary=tb_user_collection, lazy="dynamic")  # 用户收藏的文章
+
     def set_password_hash(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password_hash(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 class Nobel(BaseModel, db.Model):
     __tablename__ = "info_nobel"
 
     id = db.Column(db.Integer, primary_key=True)  # 分类编号
     name = db.Column(db.String(64), nullable=False)  # 分类名
+
 
 class News(BaseModel, db.Model):
     """文章"""
@@ -49,4 +62,3 @@ class News(BaseModel, db.Model):
     content = db.Column(db.Text, nullable=False)  # 文章内容
     index_image_url = db.Column(db.String(256))  # 文章列表图片路径
     nobel_id = db.Column(db.Integer, db.ForeignKey("info_nobel.id"))
-
