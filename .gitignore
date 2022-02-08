@@ -3,6 +3,6 @@
 
 *.py[cod]
 *.log
-.env
+*.env
 migrations/
 
