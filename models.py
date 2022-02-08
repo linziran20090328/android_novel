@@ -41,7 +41,7 @@ class User(db.Model, UserMixin, BaseModel):
         ),
         default="MAN")
     collection_news = db.relationship("News", secondary=tb_user_collection, lazy="dynamic")  # 用户收藏的文章
-    novel_view_records = db.relationship('Nobel', )
+    novel_view_records = db.relationship('Nobel', secondary=tb_user_novel_view_records, lazy="dynamic", backref='user')
 
     def set_password_hash(self, password):
         self.password_hash = generate_password_hash(password)
