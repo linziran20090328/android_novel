@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from common.redis_utils import RedisStore
 # from models import User
 # from common.redis_utils import RedisStore
-from common.utils import AnonymousUser
 # from flask import session
 
 db = SQLAlchemy()
@@ -12,8 +11,7 @@ migrate = Migrate()
 redis_store = RedisStore()
 login_manager = LoginManager()
 # 需要权限的页面重定向到首页
-login_manager.login_view = '重定向的'
-login_manager.anonymous_user = AnonymousUser
+login_manager.login_view = 'index.index_index'
 
 from models import User
 

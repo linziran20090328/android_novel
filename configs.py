@@ -17,7 +17,7 @@ class BaseConfig:
 
 class DevelopmentConfig(BaseConfig):
     """开发配置"""
-    SQLALCHEMY_DATABASE_URI = "mysql://root:mysql@127.0.0.1:3306/info"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/info"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
@@ -28,7 +28,7 @@ class TestingConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     """生成环境配置"""
-    SQLALCHEMY_DATABASE_URI = "mysql://root:mysql@127.0.0.1:3306/info"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/info"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOG_LEVEL = logging.ERROR
 

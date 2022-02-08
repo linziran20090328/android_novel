@@ -3,12 +3,13 @@ import os
 from flask import Flask
 
 from configs import config
-from extensions import db
+from extensions import db,migrate,login_manager,redis_store
 from common.utils import setup_log
-
+import pymysql
 
 def create_app(config_name=None):
-    app = Flask('项目名称')
+    pymysql.install_as_MySQLdb()
+    app = Flask('andorid_novel')
 
     if not config_name:
         # 没有没有传入配置文件，则从本地文件读取
@@ -24,3 +25,6 @@ def create_app(config_name=None):
 
 def register_extensions(app):
     db.init_app(app)
+    migrate.init_app(app,db)
+    login_manager.init_app(app)
+    redis_store.init_app(app)
